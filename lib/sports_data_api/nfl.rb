@@ -7,12 +7,13 @@ module SportsDataApi
     DIR = File.join(File.dirname(__FILE__), 'nfl')
     BASE_URL = 'http://api.sportsdatallc.org/nfl-%{access_level}%{version}'
 
-    autoload :Team,   File.join(DIR, 'team')
-    autoload :Game,   File.join(DIR, 'game')
-    autoload :Games,  File.join(DIR, 'games')
-    autoload :Week,   File.join(DIR, 'week')
-    autoload :Season, File.join(DIR, 'season')
-    autoload :Venue,  File.join(DIR, 'venue')
+    autoload :Team,      File.join(DIR, 'team')
+    autoload :Game,      File.join(DIR, 'game')
+    autoload :Games,     File.join(DIR, 'games')
+    autoload :Week,      File.join(DIR, 'week')
+    autoload :Season,    File.join(DIR, 'season')
+    autoload :Venue,     File.join(DIR, 'venue')
+    autoload :Broadcast, File.join(DIR, 'broadcast')
 
     ##
     # Fetches NFL season schedule for a given year and season.
