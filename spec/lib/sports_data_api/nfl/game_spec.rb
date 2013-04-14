@@ -30,6 +30,9 @@ describe SportsDataApi::Nfl::Game, vcr: {
     its(:status) { should eq 'closed' }
     its(:home_team) { should be_an_instance_of(SportsDataApi::Nfl::Team) }
     its(:away_team) { should be_an_instance_of(SportsDataApi::Nfl::Team) }
+    its(:venue) { should be_an_instance_of(SportsDataApi::Nfl::Venue) }
+    its(:broadcast) { should be_an_instance_of(SportsDataApi::Nfl::Broadcast) }
+    its(:weather) { should be_an_instance_of(SportsDataApi::Nfl::Weather) }
   end
   context 'results from boxscore fetch' do
     subject { boxscore }
@@ -43,6 +46,9 @@ describe SportsDataApi::Nfl::Game, vcr: {
     its(:clock) { should eq ':00' }
     its(:home_team) { should be_an_instance_of(SportsDataApi::Nfl::Team) }
     its(:away_team) { should be_an_instance_of(SportsDataApi::Nfl::Team) }
+    its(:venue) { should be_an_instance_of(SportsDataApi::Nfl::Venue) }
+    its(:broadcast) { should be_an_instance_of(SportsDataApi::Nfl::Broadcast) }
+    its(:weather) { should be_an_instance_of(SportsDataApi::Nfl::Weather) }
   end
   context 'results from weekly schedule fetch' do
     subject { weekly_schedule.first }
