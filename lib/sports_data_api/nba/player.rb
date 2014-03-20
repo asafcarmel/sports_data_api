@@ -1,20 +1,23 @@
 module SportsDataApi
   module Nba
     class Player
-      attr_reader :stats
-
-      def initialize(xml)
-        if xml.is_a? Nokogiri::XML::Element
-          player_ivar = self.instance_variable_set("@#{xml.name}", {})
-          self.class.class_eval { attr_reader :"#{xml.name}" }
-          xml.attributes.each do | attr_name, attr_value|
-            player_ivar[attr_name.to_sym] = attr_value.value
-          end
-
-          stats_xml = xml.xpath('statistics')
-          if stats_xml.is_a? Nokogiri::XML::NodeSet and stats_xml.count > 0
-            @stats = SportsDataApi::Stats.new(stats_xml.first)
-          end
+      attr_reader :id, :status, :full_name, :first_name, :last_name, :abbr_name, :weight, :height, :position, :primary_position,
+      :jersey_number, :college, :birthdate
+      
+      def initialize(xml)        
+        if xml.is_a? Nokogiri::XML::Element          
+          @id = xml['id']
+          @status = xml['status']            
+          @full_name = xml['full_name']
+          @first_name = xml['first_name']
+          @last_name = xml['last_name']
+          @abbr_name = xml['abbr_name']
+          @weight = xml['weight']
+          @height = xml['height']
+          @position = xml['position']
+          @primary_position = xml['primary_position']
+          @jersey_number = xml['jersey_number'].to_i
+          @birthdate = xml['birthdate']
         end
       end
     end
