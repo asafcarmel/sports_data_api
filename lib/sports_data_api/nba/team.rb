@@ -10,14 +10,10 @@ module SportsDataApi
           @name = xml['name']
           @market = xml['market']
 
-          allPlayers = xml.xpath('players').xpath('player')
-          @players = allPlayers.map do |player|
-            Player.new(player)
-          end
-
+          players_xml = xml.xpath('players').xpath('player')
+          @players = players_xml.map { |player| Player.new(player) }
         end
       end
-
     end
   end
 end
