@@ -17,7 +17,7 @@ module SportsDataApi
           @away = xml['visitor']
           @status = xml['status']
           @venue = xml['venue']
-          @broadcast = Broadcast.new(xml.xpath('broadcast'))
+          @broadcast = SportsDataApi::Mlb::Broadcast.new(xml.xpath('broadcast'))
         end
       end
     end
