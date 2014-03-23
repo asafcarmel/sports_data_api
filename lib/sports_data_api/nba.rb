@@ -76,7 +76,7 @@ module SportsDataApi
 
     def self.team_profile(team, version = DEFAULT_VERSION)
       response = self.response_xml(version, "/teams/#{team}/profile.xml")
-      return Team.new(response.xpath("/team"))
+      return Team.new(response.xpath("/team").first)
     end
 
     ##
