@@ -19,8 +19,8 @@ module SportsDataApi
 
       def deserialize_overall_node(overall)
         totals = initialize_stats(overall.xpath('total').first)
-        avrages = initialize_stats(overall.xpath('average').first)
-        PlayerStats.new(totals, avrages)
+        averages = initialize_stats(overall.xpath('average').first)
+        PlayerStats.new(totals, averages)
       end
 
       def initialize_stats(xml)
