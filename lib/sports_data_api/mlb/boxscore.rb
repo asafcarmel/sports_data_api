@@ -2,10 +2,11 @@ module SportsDataApi
   module Mlb
     class Boxscore
       VALID_GAME_STATUSES = ['closed', 'inprogress']
-        
+
       def initialize(xml)
         xml = xml.first if xml.is_a? Nokogiri::XML::NodeSet
         return unless VALID_GAME_STATUSES.include? xml['status'].to_s.downcase
+
 
         boxscore_ivar = self.instance_variable_set("@game_state", {})
         self.class.class_eval { attr_reader :"game_state" }
@@ -15,7 +16,7 @@ module SportsDataApi
 
         home = xml.xpath("home").first
         boxscore_ivar[:home_score] = home.attributes["runs"].value
-
+        boxscore_ivar[:state] = xml['status'].to_s.downcase
         if xml['status'] == 'closed'
           inning = xml.xpath('final').first
           inning.attributes.each do | attr_name, attr_value|
