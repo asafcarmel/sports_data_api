@@ -4,12 +4,11 @@ module SportsDataApi
       VALID_GAME_STATUSES = ['closed', 'inprogress']
 
       def initialize(xml)
-        xml = xml.first if xml.is_a? Nokogiri::XML::NodeSet
-        return unless VALID_GAME_STATUSES.include? xml['status'].to_s.downcase
-
-
         boxscore_ivar = self.instance_variable_set("@game_state", {})
         self.class.class_eval { attr_reader :"game_state" }
+
+        xml = xml.first if xml.is_a? Nokogiri::XML::NodeSet
+        return unless VALID_GAME_STATUSES.include? xml['status'].to_s.downcase
 
         visitor = xml.xpath("visitor").first
         boxscore_ivar[:visitor_score] = visitor.attributes["runs"].value
