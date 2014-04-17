@@ -4,10 +4,10 @@ module SportsDataApi
       attr_reader :id, :year, :games
 
       def initialize(xml)
-        if xml.is_a? Nokogiri::XML::Element
-          @id = xml['id']
-          @year = xml['year']
-          @games = xml.xpath("games").xpath("game").map do |game|
+        if xml.is_a? Nokogiri::XML::NodeSet
+#          @id = xml['id']
+#          @year = xml['year']
+          @games = xml.map do |game|
             Game.new(game)
           end          
         end
