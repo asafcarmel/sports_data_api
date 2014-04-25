@@ -18,13 +18,17 @@ module SportsDataApi
         boxscore_ivar[:state] = xml['status'].to_s.downcase
         if xml['status'] == 'closed'
           inning = xml.xpath('final').first
-          inning.attributes.each do | attr_name, attr_value|
-            boxscore_ivar[attr_name.to_sym] = attr_value.value
+          if inning
+            inning.attributes.each do | attr_name, attr_value|
+              boxscore_ivar[attr_name.to_sym] = attr_value.value
+            end
           end
         elsif xml['status'] == 'inprogress'
           inning = xml.xpath('outcome').first
-          boxscore_ivar[:inning] = inning.attributes['current_inning'].value
-          boxscore_ivar[:inning_half] = inning.attributes['current_inning_half'].value
+          if inning
+            boxscore_ivar[:inning] = inning.attributes['current_inning'].value
+            boxscore_ivar[:inning_half] = inning.attributes['current_inning_half'].value
+          end
         end
       end
     end
