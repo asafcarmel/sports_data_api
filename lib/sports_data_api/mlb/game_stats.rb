@@ -8,6 +8,7 @@ module SportsDataApi
         @stats[:hitting] = []
         @stats[:pitching] = []
         xml = xml.first if xml.is_a? Nokogiri::XML::NodeSet
+        @stats[:status] = xml['status']
         xml.children.each do |child|
           next unless child.is_a? Nokogiri::XML::Element
           child.xpath("hitting").xpath("players").xpath("player").each do |player|
