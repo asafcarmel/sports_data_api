@@ -10,7 +10,7 @@ module SportsDataApi
         @stats[:hitting] = []
         @stats[:pitching] = []
         xml = xml.first if xml.is_a? Nokogiri::XML::NodeSet
-        @game_status = @stats[:status] = xml['status']
+        @game_status = @stats[:status] = xml["status"]
         
         xml.children.each do |child|
           next unless child.is_a? Nokogiri::XML::Element
