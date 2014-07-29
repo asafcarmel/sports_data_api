@@ -1,6 +1,5 @@
 module SportsDataApi
   module Mlb
-
     class Exception < ::Exception
     end
 
@@ -24,15 +23,24 @@ module SportsDataApi
     autoload :Venues, File.join(DIR, 'venues')
     autoload :PlayerSeasonStat, File.join(DIR, 'player_season_stat')
     autoload :PlayerSeasonStats, File.join(DIR, 'player_season_stats')
-    
+    autoload :LineupPlayer, File.join(DIR, 'lineup_player')
+    autoload :Event, File.join(DIR, 'event')
+
     ##
-    # Fetches MLB players seasonal statistics 
+    # Fetches MLB event info & lineups
+    def self.game_event(event_id, version = DEFAULT_VERSION)
+      response = self.response_xml(version, "/event/#{event_id}.xml")
+      return Event.new(response.xpath("/event"))
+    end
+
+    ##
+    # Fetches MLB players seasonal statistics
     def self.player_season_stats(year=Date.today.year, version = DEFAULT_VERSION)
       response = self.response_xml(version, "/seasontd/players/#{year}.xml")
 
       return PlayerSeasonStats.new(response.xpath("/statistics"))
     end
-    
+
     ##
     # Fetches all MLB teams
     def self.teams(year=Date.today.year, version = DEFAULT_VERSION)
@@ -83,6 +91,7 @@ module SportsDataApi
     end
 
     private
+
     def self.response_xml(version, url)
       base_url = BASE_URL % { access_level: SportsDataApi.access_level(SPORT), version: version }
       response = SportsDataApi.generic_request("#{base_url}#{url}", SPORT)
