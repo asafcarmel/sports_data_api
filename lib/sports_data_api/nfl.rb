@@ -22,7 +22,9 @@ module SportsDataApi
     autoload :Venue, File.join(DIR, 'venue')
     autoload :Broadcast, File.join(DIR, 'broadcast')
     autoload :Weather, File.join(DIR, 'weather')
-
+    autoload :GameStats, File.join(DIR, 'game_stats')
+    autoload :TeamGameStats, File.join(DIR, 'team_game_stats')
+    autoload :PlayerGameStats, File.join(DIR, 'player_game_stats')
     ##
     # Fetches NFL season schedule for a given year and season
     def self.schedule(year, season, version = DEFAULT_VERSION)
@@ -51,13 +53,24 @@ module SportsDataApi
     end
 
     ##
-    # Fetch NFL player seaon stats for a given team, season and season type
+    # Fetch NFL player season statistics for a given team, season and season type
     def self.player_season_stats(team, season, season_type, version = DEFAULT_VERSION)
       response = self.response_xml(version, "/teams/#{team}/#{season}/#{season_type}/statistics.xml")
 
       return PlayerSeasonStats.new(response.xpath("/season").xpath("team").xpath("players"))
     end
+    
+    ##
+    # Fetch NFL game statistics for a given team, season and season type
+    def self.game_statistics(year, season, week, home, away, version = DEFAULT_VERSION)
+      season = season.to_s.upcase.to_sym
+      raise SportsDataApi::Nfl::Exception.new("#{season} is not a valid season") unless Season.valid?(season)
 
+      response = self.response_xml(version, "/#{year}/#{season}/#{week}/#{away}/#{home}/statistics.xml")
+
+      return GameStats.new(year, season, week, response.xpath("/game"))
+    end
+    
     ##
     # Fetches NFL boxscore for a given game
     def self.boxscore(year, season, week, home, away, version = DEFAULT_VERSION)
