@@ -1,6 +1,5 @@
 module SportsDataApi
   module Nfl
-
     class Exception < ::Exception
     end
 
@@ -14,7 +13,6 @@ module SportsDataApi
     autoload :TeamRoster, File.join(DIR, 'team_roster')
     autoload :Player, File.join(DIR, 'player')
     autoload :TeamSeasonStats, File.join(DIR, 'team_season_stats')
-    autoload :PlayerSeasonStats, File.join(DIR, 'player_season_stats')
     autoload :Game, File.join(DIR, 'game')
     autoload :Games, File.join(DIR, 'games')
     autoload :Week, File.join(DIR, 'week')
@@ -24,7 +22,8 @@ module SportsDataApi
     autoload :Weather, File.join(DIR, 'weather')
     autoload :GameStats, File.join(DIR, 'game_stats')
     autoload :TeamGameStats, File.join(DIR, 'team_game_stats')
-    autoload :PlayerGameStats, File.join(DIR, 'player_game_stats')
+    autoload :PlayerStats, File.join(DIR, 'player_stats')
+
     ##
     # Fetches NFL season schedule for a given year and season
     def self.schedule(year, season, version = DEFAULT_VERSION)
@@ -53,14 +52,6 @@ module SportsDataApi
     end
 
     ##
-    # Fetch NFL player season statistics for a given team, season and season type
-    def self.player_season_stats(team, season, season_type, version = DEFAULT_VERSION)
-      response = self.response_xml(version, "/teams/#{team}/#{season}/#{season_type}/statistics.xml")
-
-      return PlayerSeasonStats.new(response.xpath("/season").xpath("team").xpath("players"))
-    end
-    
-    ##
     # Fetch NFL game statistics for a given team, season and season type
     def self.game_statistics(year, season, week, home, away, version = DEFAULT_VERSION)
       season = season.to_s.upcase.to_sym
@@ -70,7 +61,7 @@ module SportsDataApi
 
       return GameStats.new(year, season, week, response.xpath("/game"))
     end
-    
+
     ##
     # Fetches NFL boxscore for a given game
     def self.boxscore(year, season, week, home, away, version = DEFAULT_VERSION)
@@ -102,6 +93,7 @@ module SportsDataApi
     end
 
     private
+
     def self.response_xml(version, url)
       base_url = BASE_URL % { access_level: SportsDataApi.access_level(SPORT), version: version }
       response = SportsDataApi.generic_request("#{base_url}#{url}", SPORT)
