@@ -1,5 +1,6 @@
 module SportsDataApi
   module Nba
+
     class Exception < ::Exception
     end
 
@@ -8,32 +9,33 @@ module SportsDataApi
     DEFAULT_VERSION = 3
     SPORT = :nba
 
-    # Schedule
-    autoload :Schedule,   File.join(DIR, 'schedule')
-    autoload :Game, File.join(DIR, 'game')
-
-    # Roosters and Teams
-    autoload :Player, File.join(DIR, 'player')
     autoload :Team, File.join(DIR, 'team')
-    autoload :League, File.join(DIR, 'league')
+    autoload :Teams, File.join(DIR, 'teams')
+    autoload :Player, File.join(DIR, 'player')
+    autoload :Game, File.join(DIR, 'game')
+    autoload :Games, File.join(DIR, 'games')
+    autoload :Season, File.join(DIR, 'season')
+    autoload :Venue, File.join(DIR, 'venue')
+    autoload :Broadcast, File.join(DIR, 'broadcast')
+    autoload :TeamStats, File.join(DIR, 'team_stats')
+    
+    ##
+    # Fetches NBA season schedule for a given year and season
+    def self.schedule(year, season, version = DEFAULT_VERSION)
+      season = season.to_s.upcase.to_sym
+      raise SportsDataApi::Nba::Exception.new("#{season} is not a valid season") unless Season.valid?(season)
 
-    # Statistics
-    autoload :SeasonalStatistics, File.join(DIR, 'seasonal_statistics')
-    autoload :GameSummary, File.join(DIR, 'game_summary')
-    autoload :Stats, File.join(DIR, 'stats')
+      response = self.response_xml(version, "/games/#{year}/#{season}/schedule.xml")
 
-    # Play by play
-    autoload :PlayByPlay, File.join(DIR, 'play_by_play')
-    autoload :Event, File.join(DIR, 'event')
-
-    def self.play_by_play(game, version = 3)
-      response = self.response_xml(version, "/games/#{game}/pbp.xml")
-      return PlayByPlay.new(response.xpath("/game").first)
+      return Season.new(response.xpath("/league/season-schedule"))
     end
 
-    def self.seasonal_statistics(year, season, team, version = 3)
-      response = self.response_xml(version, "/seasontd/#{year}/#{season}/teams/#{team}/statistics.xml")
-      return SeasonalStatistics.new(response.xpath("/season/team").first)
+    ##
+    # Fetches NBA team roster
+    def self.team_roster(team, version = DEFAULT_VERSION)
+      response = self.response_xml(version, "/teams/#{team}/profile.xml")
+
+      return Team.new(response.xpath("team"))
     end
 
     ##
@@ -41,39 +43,31 @@ module SportsDataApi
     def self.game_summary(game, version = DEFAULT_VERSION)
       response = self.response_xml(version, "/games/#{game}/summary.xml")
 
-      return GameSummary.new(response.xpath("/game").first)
-    end
-
-    ##
-    # Fetches NBA season schedule for a given year and season
-    def self.schedule(year, season, version = DEFAULT_VERSION)
-      #          season = season.to_s.upcase.to_sym
-      response = self.response_xml(version, "/games/#{year}/#{season}/schedule.xml")
-      return Schedule.new(response.xpath("/league/season-schedule//game"))
-    end
-
-    ##
-    # Fetches NBA series schedule for a given year and season
-    def self.series_schedule(year, season, version = DEFAULT_VERSION)
-      response = self.response_xml(version, "/series/#{year}/#{season}/schedule.xml")
-      return Schedule.new(response.xpath("/league/season-schedule//game"))
-    end
-
-    def self.team_profile(team, version = DEFAULT_VERSION)
-      response = self.response_xml(version, "/teams/#{team}/profile.xml")
-      return Team.new(response.xpath("/team").first)
+      return Game.new(xml: response.xpath("/game"))
     end
 
     ##
     # Fetches all NBA teams
-    def self.league_hierarchy(version = DEFAULT_VERSION)
+    def self.teams(version = DEFAULT_VERSION)
       response = self.response_xml(version, "/league/hierarchy.xml")
 
-      return League.new(response.xpath('/league').first)
+      return Teams.new(response.xpath('/league'))
     end
 
-    private
+    ##
+    # Fetches NBA daily schedule for a given date
+    def self.daily(year, month, day, version = DEFAULT_VERSION)
+      response = self.response_xml(version, "/games/#{year}/#{month}/#{day}/schedule.xml")
 
+      return Games.new(response.xpath('league/daily-schedule'))
+    end
+
+    def self.seasonal_statistics(year, season, team, version = DEFAULT_VERSION)
+      response = self.response_xml(version, "/seasontd/#{year}/#{season}/teams/#{team}/statistics.xml")
+      return TeamStats.new(response.xpath("/season/team").first)
+    end
+    
+    private
     def self.response_xml(version, url)
       base_url = BASE_URL % { access_level: SportsDataApi.access_level(SPORT), version: version }
       response = SportsDataApi.generic_request("#{base_url}#{url}", SPORT)

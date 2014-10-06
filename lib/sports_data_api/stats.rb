@@ -17,9 +17,9 @@ module SportsDataApi
       end
 
       def each(&block)
-        @_values.each do |stat|
+        @_values.each do |k,v|
           if block_given?
-            block.call stat
+            block.call(k,v)
           else
             yield stat
           end
