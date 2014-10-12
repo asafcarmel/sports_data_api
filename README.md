@@ -1,5 +1,4 @@
-# SportsDataApi [![Build Status](https://travis-ci.org/toplinegamelabs/sports_data_api.png)](https://travis-ci.org/toplinegamelabs/sports_data_api) [![Coverage Status](https://coveralls.io/repos/RLovelett/sports_data_api/badge.png?branch=master)](https://coveralls.io/r/RLovelett/sports_data_api?branch=master)
-
+# SportsDataApi [![Build Status](https://travis-ci.org/RLovelett/sports_data_api.png?branch=master)](https://travis-ci.org/RLovelett/sports_data_api) [![Coverage Status](https://coveralls.io/repos/RLovelett/sports_data_api/badge.png?branch=master)](https://coveralls.io/r/RLovelett/sports_data_api?branch=master)
 
 SportsDataApi is an attempt to make a Ruby interface to the
 [SportsData](http://www.sportsdatallc.com/) API. The goal is to
@@ -23,11 +22,11 @@ log](https://github.com/rlovelett/sports_data_api/issues).
 
   * [NFL](http://developer.sportsdatallc.com/docs/NFL_API)
   * [NBA](http://developer.sportsdatallc.com/docs/NBA_API)
+  * [MLB](http://developer.sportsdatallc.com/docs/MLB_API)
   * TODO
-    1. [MLB](http://developer.sportsdatallc.com/docs/MLB_API)
-    2. [NHL](http://developer.sportsdatallc.com/docs/NHL_API)
-    3. [NCAA Basketball](http://developer.sportsdatallc.com/docs/NCAA_Mens_Basketball)
-    4. [NCAA Football](http://developer.sportsdatallc.com/docs/NCAA_Football_API)
+    1. [NHL](http://developer.sportsdatallc.com/docs/NHL_API)
+    2. [NCAA Basketball](http://developer.sportsdatallc.com/docs/NCAA_Mens_Basketball)
+    3. [NCAA Football](http://developer.sportsdatallc.com/docs/NCAA_Football_API)
 
 ## Installation
 
