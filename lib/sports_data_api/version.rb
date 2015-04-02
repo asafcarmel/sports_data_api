@@ -1,3 +1,3 @@
 module SportsDataApi
-  VERSION = "0.1.2.a"
+  VERSION = "0.1.2.b"
 end

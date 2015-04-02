@@ -1,7 +1,7 @@
 module SportsDataApi
   module Nfl
     class GameStats
-      attr_reader :id, :status, :home, :away, :teams
+      attr_reader :id, :status, :home, :away, :teams, :quarter
       def initialize(year, season, week, xml)
         xml = xml.first if xml.is_a? Nokogiri::XML::NodeSet
 
@@ -9,6 +9,7 @@ module SportsDataApi
         @status = xml["status"]
         @home   = xml["home"]
         @away   = xml["away"]
+        @quarter = xml['quarter'].to_i
 
         @teams = []
 
