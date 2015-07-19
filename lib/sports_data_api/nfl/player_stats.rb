@@ -5,15 +5,15 @@ module SportsDataApi
       :penalty, :passing, :kickoffs, :fumbles, :first_downs, :extra_point, :defense, :blocked_field_goal_return,
       :blocked_punt_return, :two_point_conversion, :field_goal
       
-      def initialize(xml=nil)
-        return if xml.nil?
+      def initialize(player_hash=nil)
+        return if player_hash.nil?
 
-        @id = xml["id"]
-        @games_played = xml["games_played"]
+        @id = player_hash["id"]
+        @games_played = player_hash["games_played"]
         
-        xml.children.each do |stat|
-          next if stat.name == "text"
-          self.instance_variable_set("@#{stat.name}", SportsDataApi::Stats.new(stat))
+        player_hash.each_pair do |key,val|
+          
+          self.instance_variable_set("@#{key}", val)
         end
       end
     end
