@@ -34,7 +34,7 @@ module SportsDataApi
 
       response = self.response_json(version, "/#{year}/#{season}/schedule.json")
 
-      return Season.new(response)
+      return response
     end
 
     
@@ -43,7 +43,7 @@ module SportsDataApi
     def self.game_roster(year, season, week, home, away, version = DEFAULT_VERSION)
       response = self.response_json(version, "/#{year}/#{season}/#{week}/#{away}/#{home}/roster.json")
 
-      return GameRoster.new(response)
+      return response
     end
     
     
@@ -52,7 +52,7 @@ module SportsDataApi
     def self.team_roster(team, version = DEFAULT_VERSION)
       response = self.response_json(version, "/teams/#{team}/roster.json")
 
-      return TeamRoster.new(response)
+      return response
     end
 
     ##
@@ -60,7 +60,7 @@ module SportsDataApi
     def self.team_season_stats(team, season, season_type, version = DEFAULT_VERSION)
       response = self.response_json(version, "/teams/#{team}/#{season}/#{season_type}/statistics.json")
 
-      return TeamSeasonStats.new(response)
+      return response
     end
 
     ##
@@ -68,7 +68,7 @@ module SportsDataApi
     def self.player_season_stats(team, season, season_type, version = DEFAULT_VERSION)
      response = self.response_json(version, "/teams/#{team}/#{season}/#{season_type}/statistics.json")
  
-       return PlayerSeasonStats.new(response)
+       return response
     end
 
     
@@ -80,7 +80,7 @@ module SportsDataApi
 
       response = self.response_json(version, "/#{year}/#{season}/#{week}/#{away}/#{home}/statistics.json")
 
-      return Game.new(year, season, week, response)
+      return response
     end
 
     ##
@@ -91,7 +91,7 @@ module SportsDataApi
 
       response = self.response_json(version, "/#{year}/#{season}/#{week}/#{away}/#{home}/boxscore.json")
 
-      return Game.new(year, season, week, response)
+      return response
     end
 
     ##
@@ -99,7 +99,7 @@ module SportsDataApi
     def self.teams(version = DEFAULT_VERSION)
       response = self.response_json(version, "/teams/hierarchy.json")
 
-      return Teams.new(response)
+      return response
     end
 
     ##
@@ -110,15 +110,21 @@ module SportsDataApi
 
       response = self.response_json(version, "/#{year}/#{season}/#{week}/schedule.json")
 
-      return Games.new(response)
+      return response
     end
 
+    def self.get_uri(version,url)
+      base_url = BASE_URL % { access_level: SportsDataApi.access_level(SPORT), version: version }
+      base_url="#{base_url}#{url}"
+    end
     private
 
     def self.response_json(version, url)
-      base_url = BASE_URL % { access_level: SportsDataApi.access_level(SPORT), version: version }
-      response = SportsDataApi.generic_request("#{base_url}#{url}", SPORT)
-      JSON.parse(response.to_s)
+      base_url =get_uri(version,url)
+      response = SportsDataApi.generic_request(base_url, SPORT)
+      t=JSON.parse(response.to_s)
+      t[:adr]=  base_url;
+        t
     end
   end
 end

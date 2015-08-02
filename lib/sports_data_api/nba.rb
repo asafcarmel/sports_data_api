@@ -67,11 +67,18 @@ module SportsDataApi
       return response
     end
     
-    private
-    def self.response_json(version, url)
+    def self.get_uri(version,url)
       base_url = BASE_URL % { access_level: SportsDataApi.access_level(SPORT), version: version }
-      response = SportsDataApi.generic_request("#{base_url}#{url}", SPORT)
-      JSON.parse(response.to_s)
+      base_url="#{base_url}#{url}"
+    end
+    private
+
+    def self.response_json(version, url)
+      base_url =get_uri(version,url)
+      response = SportsDataApi.generic_request(base_url, SPORT)
+      t=JSON.parse(response.to_s)
+      t[:adr]=  base_url;
+        t
     end
   end
 end
