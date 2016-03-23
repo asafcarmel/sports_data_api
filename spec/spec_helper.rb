@@ -1,8 +1,7 @@
- require 'simplecov'
-require 'coveralls'
+require 'simplecov'
 require 'pry'
+
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-  Coveralls::SimpleCov::Formatter,
   SimpleCov::Formatter::HTMLFormatter
 ]
 SimpleCov.start do
